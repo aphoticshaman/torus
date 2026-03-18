@@ -21,6 +21,9 @@
 \usepackage{subcaption}
 \usepackage{enumitem}
 \usepackage{float}
+\usepackage{url}
+
+\emergencystretch=3em
 
 \pgfplotsset{compat=1.18}
 \usetikzlibrary{arrows.meta, positioning, calc, fit, backgrounds, shapes.geometric}
@@ -364,9 +367,9 @@ $\beta_2$ & 0 (no enclosed cavity) \\
 \centering
 \caption{Topology preservation: 50/55 conditions (91\%). The transition is resolution-independent.}
 \label{tab:results}
-\begin{tabular}{c|ccccccc}
+\begin{tabular}{c|cccccc}
 \toprule
-\textbf{Resolution} & \textbf{2\,m} & \textbf{5\,m} & \textbf{8\,m} & \textbf{12\,m} & \textbf{15\,m} & \textbf{20\,m} \\
+\textbf{Res.} & \textbf{2\,m} & \textbf{5\,m} & \textbf{8\,m} & \textbf{12\,m} & \textbf{15\,m} & \textbf{20\,m} \\
 \midrule
 $32^2$   & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark^*$ & $\times$ \\
 $64^2$   & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\times$ \\
@@ -434,7 +437,7 @@ where $R$ is the torus major radius, $r$ is the minor radius, and $d$ is the obs
 
 \textbf{The threshold is distance-dependent, not resolution-dependent.} If the failure were a sampling-rate effect (Nyquist theorem), higher resolution would recover the topology at greater distances. It does not. $512^2$ performs identically to $32^2$ at every distance.
 
-\textbf{The determining factor is apparent angular size.} The phase transition occurs between $\Gamma = 0.100$ (preserved) and $\Gamma = 0.075$ (lost), corresponding to a hole apparent half-angle of approximately $5$--$6°$. This parameterization is dimensionless and generalizes beyond this specific torus.
+\textbf{The determining factor is apparent angular size.} The phase transition occurs between $\Gamma = 0.100$ (preserved) and $\Gamma = 0.075$ (lost), corresponding to a hole apparent half-angle of approximately $5^\circ$--$6^\circ$. This parameterization is dimensionless and generalizes beyond this specific torus.
 
 \textbf{Connection to contrast sensitivity.} This finding maps directly onto the contrast sensitivity function (CSF) in biological vision research~\cite{campbell1968}: the human visual system detects spatial features based on contrast relative to background, not absolute luminance. Our finding that topological detection depends on depth contrast at a given distance, not on pixel resolution, is structurally the same relationship operating in the depth domain.
 
@@ -534,8 +537,8 @@ The specific finding that observer \emph{position} (geometric relationship) dete
     \item Install Rust: \url{https://rustup.rs} (stable, $\geq$1.70)
     \item Build: \texttt{cargo build --release}
     \item Test: \texttt{cargo test} (17 tests, including $\partial^2 = 0$ verification)
-    \item Ground truth: \texttt{cargo run --release -- --resolution 128 --photons 1000000 --topology --out .}
-    \item Full experiment: \texttt{cargo run --release -- --resolution 128 --photons 1000000 --experiment --out .}
+    \item Ground truth: \texttt{cargo run --release -\,- --resolution 128}\\\texttt{--photons 1000000 --topology --out .}
+    \item Full experiment: \texttt{cargo run --release -\,- --resolution 128}\\\texttt{--photons 1000000 --experiment --out .}
 \end{enumerate}
 
 Total time: under 5 minutes on any modern CPU. No GPU required.
@@ -623,7 +626,7 @@ Given occupied voxels $\mathcal{O} = \{(x_i, y_i, z_i)\}$, the cubical complex $
     \item \textbf{0-cells:} Eight vertices per cube at integer coordinates.
 \end{itemize}
 
-\subsection{Boundary Operators over $\mathbb{Z}_2$}
+\subsection{\texorpdfstring{Boundary Operators over $\mathbb{Z}_2$}{Boundary Operators over Z2}}
 
 \begin{align}
     \partial_1(\text{edge at } \mathbf{p}, d) &= v(\mathbf{p}) + v(\mathbf{p} + \boldsymbol{\delta}_d) \\
@@ -673,10 +676,10 @@ Both bugs demonstrate the paper's thesis: the simulation (System~1) was correct 
 \centering
 \caption{Comparison with existing approaches. This work is the first to combine verified topological ground truth with quantitative cross-projection measurement.}
 \label{tab:priorart}
-\small
-\begin{tabular}{lcccccc}
+\footnotesize
+\begin{tabular}{lccccc}
 \toprule
-\textbf{System} & \textbf{Sim-Indep.} & \textbf{Obs. as Obj.} & \textbf{Dynamic} & \textbf{Interactive} & \textbf{Verified $H_*$} \\
+\textbf{System} & \textbf{Sim-Indep.} & \textbf{Obs.\ as Obj.} & \textbf{Dynamic} & \textbf{Interactive} & \textbf{Verified $H_*$} \\
 \midrule
 Carmack SVO (2008) & Partial & No & No & No & No \\
 Euclideon (2011) & Storage & No & No & Limited & No \\
