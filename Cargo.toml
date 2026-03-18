@@ -1,0 +1,18 @@
+[package]
+name = "torus"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+glam = "0.29"
+image = "0.25"
+rand = "0.8"
+rayon = "1.10"
+clap = { version = "4", features = ["derive"] }
+
+[dev-dependencies]
+approx = "0.5"
+
+[profile.release]
+opt-level = 3
+lto = true
