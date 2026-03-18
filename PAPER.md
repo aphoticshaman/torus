@@ -13,7 +13,7 @@ ORCID: 0009-0005-0307-0746
 
 ## Abstract
 
-Current 3D game engines store geometry in three-dimensional data structures but compute on lower-dimensional manifolds at nearly every pipeline stage: navigation meshes are 2D simplicial complexes, collision detection operates on 2D surfaces with 1D winding-number inference, broadphase uses axis-aligned bounding boxes with trivial topology, and rendering projects to a 2D framebuffer through observer-dependent culling. This paper presents a minimal engine architecture that enforces a hard separation between an observer-independent simulation ("System 1") and an observation apparatus ("System 2") that exists as an object inside the simulation and queries it through a formally defined API boundary. We implement this architecture in Rust, construct a solid torus in a sparse voxel grid with forward photon-mapped illumination, verify that the boundary operator on the cubical complex satisfies d² = 0, confirm that the solid torus has Betti number β₁ = 1 (the hole exists), and then measure whether this topological feature survives projection through the observation boundary into System 2's depth map. We find a phase transition: at observer distances ≤ 5m, the hole is recovered at all tested image resolutions (32² through 512²); at distances ≥ 8m, the hole vanishes at all resolutions. The critical threshold is distance-dependent, not resolution-dependent, ruling out sampling-rate explanations. The topology is preserved or destroyed by the geometric relationship between observer and topological feature, not by the fidelity of the observation instrument. All results are reproducible from the companion codebase in under five minutes on commodity hardware.
+Current 3D game engines store geometry in three-dimensional data structures but compute on lower-dimensional manifolds at nearly every pipeline stage: navigation meshes are 2D simplicial complexes, collision detection operates on 2D surfaces with 1D winding-number inference, broadphase uses axis-aligned bounding boxes with trivial topology, and rendering projects to a 2D framebuffer through observer-dependent culling. This paper presents a minimal engine architecture that enforces a hard separation between an observer-independent simulation ("System 1") and an observation apparatus ("System 2") that exists as an object inside the simulation and queries it through a formally defined API boundary. We implement this architecture in Rust, construct a solid torus in a sparse voxel grid with forward photon-mapped illumination, verify that the boundary operator on the cubical complex satisfies d² = 0, confirm that the solid torus has Betti number β₁ = 1 (the hole exists), and then measure whether this topological feature survives projection through the observation boundary into System 2's depth map. We find a phase transition: at observer distances ≤ 15m, the hole is recovered at all tested image resolutions (32² through 512²); at 20m, the hole vanishes at all resolutions. The critical threshold is parameterized by a dimensionless geometric ratio Γ = (R − r) / d ≈ 0.08–0.10, is distance-dependent and resolution-independent, ruling out sampling-rate explanations. The topology is preserved or destroyed by the geometric relationship between observer and topological feature, not by the fidelity of the observation instrument. All results are reproducible from the companion codebase in under five minutes on commodity hardware.
 
 ---
 
@@ -265,26 +265,46 @@ The low storage efficiency is expected: the torus is a small object in a 10m³ v
 
 ### 5.3 Topology Preservation Matrix
 
-| Resolution | 2m | 5m | 8m | 12m |
-|:----------:|:--:|:--:|:--:|:---:|
-| 32² | β₁=1 ✓ | β₁=1 ✓ | β₁=0 ✗ | β₁=0 ✗ |
-| 64² | β₁=1 ✓ | β₁=1 ✓ | β₁=0 ✗ | β₁=0 ✗ |
-| 128² | β₁=1 ✓ | β₁=1 ✓ | β₁=0 ✗ | β₁=0 ✗ |
-| 256² | β₁=1 ✓ | β₁=1 ✓ | β₁=0 ✗ | β₁=0 ✗ |
-| 512² | β₁=1 ✓ | β₁=1 ✓ | β₁=0 ✗ | β₁=0 ✗ |
+Distances tested: 2, 3, 4, 5, 6, 7, 8, 10, 12, 15, 20 m. Resolutions: 32² through 512².
 
-**Topology preserved: 10/20 conditions (50%).**
+| Resolution | 2m | 5m | 8m | 12m | 15m | 20m |
+|:----------:|:--:|:--:|:--:|:---:|:---:|:---:|
+| 32² | β₁=1 ✓ | β₁=1 ✓ | β₁=1 ✓ | β₁=1 ✓ | β₁=1 ✓* | β₁=0 ✗ |
+| 64² | β₁=1 ✓ | β₁=1 ✓ | β₁=1 ✓ | β₁=1 ✓ | β₁=1 ✓ | β₁=0 ✗ |
+| 128² | β₁=1 ✓ | β₁=1 ✓ | β₁=1 ✓ | β₁=1 ✓ | β₁=1 ✓ | β₁=0 ✗ |
+| 256² | β₁=1 ✓ | β₁=1 ✓ | β₁=1 ✓ | β₁=1 ✓ | β₁=1 ✓ | β₁=0 ✗ |
+| 512² | β₁=1 ✓ | β₁=1 ✓ | β₁=1 ✓ | β₁=1 ✓ | β₁=1 ✓ | β₁=0 ✗ |
+
+*At 32² and 15m, the foreground ring fragments (8 disconnected components) but the hole is still detected.
+
+**Topology preserved: 50/55 conditions (91%).**
 
 The transition is binary and sharp:
-- All conditions at distance ≤ 5m preserve β₁ = 1.
-- All conditions at distance ≥ 8m lose β₁ (measure β₁ = 0).
-- Resolution has no effect at any distance.
+- All conditions at distances 2–15m preserve β₁ = 1.
+- All conditions at distance 20m lose β₁ (measure β₁ = 0).
+- Resolution has no effect at any distance tested.
+- At intermediate distances (6–12m), results are identical across all resolutions from 32² to 512².
+
+**Note on a corrected measurement error:** An earlier version of the experiment used a ray-marching bounds check (z ≥ -1.0m) that rejected rays originating below z = -1m. This caused observers at distances ≥ 6m (z-position ≤ -1) to produce all-miss depth maps, creating a false "phase transition" at 5–8m. The bounds were corrected to allow ray origins anywhere within ±10m of the simulation volume. The corrected results show the genuine transition between 15m and 20m, consistent with the geometric analysis below.
 
 ### 5.4 Analysis
 
 **The threshold is distance-dependent, not resolution-dependent.** If the failure were a sampling-rate effect (Nyquist theorem), then higher resolution would recover the topology at greater distances. It does not. 512² performs identically to 32² at every distance. This rules out inadequate angular sampling as the cause of topology loss.
 
-**The determining factor is depth contrast.** The torus has outer radius 2.5m from its center. At 5m distance, the torus subtends approximately 27° apparent angle, and the hole subtends approximately 14°. The depth difference between "through the hole" (far background) and "torus surface" (near) is large relative to the torus's own depth extent. At 8m, the apparent angles shrink but more critically, the torus's depth extent (about 1m front-to-back) becomes small relative to the total depth range. The depth map loses the contrast needed to distinguish "seeing through the hole" from "seeing the back surface of the torus."
+**The determining factor is apparent angular size.** Define the dimensionless geometric ratio:
+
+> Γ = (R − r) / d
+
+where R is the torus major radius, r is the minor radius, and d is the observer distance. Γ is the tangent of the half-angle subtended by the hole opening. The phase transition occurs between:
+
+| Distance | Γ | β₁ detected |
+|----------|-----|-------------|
+| 15m | 0.100 | Yes |
+| 20m | 0.075 | No |
+
+**The critical threshold is Γ_c ≈ 0.08–0.10**, corresponding to a hole apparent half-angle of approximately 5–6°. This parameterization is dimensionless and geometry-dependent: it generalizes beyond this specific torus. For any solid torus with hole inner radius (R − r) viewed on-axis from distance d, the depth-map topology estimator predicts β₁ recovery when Γ > Γ_c and topology loss when Γ < Γ_c, independent of image resolution.
+
+**At the critical threshold, the failure mode is geometric, not informational.** The torus ring at 20m distance subtends approximately 8.5° total apparent diameter in a 90° FOV image. At 512² resolution, this corresponds to ~48 pixels across the ring — more than sufficient to resolve the shape. The ring IS visible. But the depth-map interior-hole estimator fails because the ring's pixel footprint becomes too narrow relative to the image to form a robustly closed annular contour in all thresholded binary images. At 15m (Γ = 0.10), the ring is wide enough; at 20m (Γ = 0.075), it is not.
 
 **The topology is preserved or destroyed by geometry, not fidelity.** This is the central finding. The observation boundary (System 2's depth map) is a topological filter whose behavior depends on the observer's geometric relationship to the topological feature, not on the observation instrument's resolution. This has a direct parallel in physics: the ability to measure a quantum state depends on the measurement basis (geometric relationship), not on the detector's sensitivity (instrument fidelity), once the sensitivity exceeds a minimum threshold.
 

@@ -90,7 +90,7 @@ fn main() {
         eprintln!("Ground truth: β₁ = {} (System 1)", ground_truth_b1);
 
         let resolutions: Vec<u32> = vec![32, 64, 128, 256, 512];
-        let distances: Vec<f32> = vec![2.0, 5.0, 8.0, 12.0];
+        let distances: Vec<f32> = vec![2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 10.0, 12.0, 15.0, 20.0];
         let look_at = Vec3::new(5.0, 5.0, 5.0);
 
         eprintln!("\n{:>6} {:>6} {:>10} {:>10} {:>10} {:>8}",

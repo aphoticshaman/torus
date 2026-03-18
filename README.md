@@ -12,15 +12,15 @@ A minimal Rust engine that enforces a hard separation between an observer-indepe
 
 The solid torus has β₁ = 1 (one non-contractible loop — the hole). System 2 recovers this topological feature at close range and loses it at long range, with a sharp phase transition that is **distance-dependent, not resolution-dependent**:
 
-| Resolution | 2m | 5m | 8m | 12m |
-|:----------:|:--:|:--:|:--:|:---:|
-| 32x32      | β₁=1 | β₁=1 | β₁=0 | β₁=0 |
-| 64x64      | β₁=1 | β₁=1 | β₁=0 | β₁=0 |
-| 128x128    | β₁=1 | β₁=1 | β₁=0 | β₁=0 |
-| 256x256    | β₁=1 | β₁=1 | β₁=0 | β₁=0 |
-| 512x512    | β₁=1 | β₁=1 | β₁=0 | β₁=0 |
+| Resolution | 2m | 5m | 8m | 12m | 15m | 20m |
+|:----------:|:--:|:--:|:--:|:---:|:---:|:---:|
+| 32x32      | β₁=1 | β₁=1 | β₁=1 | β₁=1 | β₁=1 | β₁=0 |
+| 64x64      | β₁=1 | β₁=1 | β₁=1 | β₁=1 | β₁=1 | β₁=0 |
+| 128x128    | β₁=1 | β₁=1 | β₁=1 | β₁=1 | β₁=1 | β₁=0 |
+| 256x256    | β₁=1 | β₁=1 | β₁=1 | β₁=1 | β₁=1 | β₁=0 |
+| 512x512    | β₁=1 | β₁=1 | β₁=1 | β₁=1 | β₁=1 | β₁=0 |
 
-More pixels do not help. A different position does.
+Critical threshold: dimensionless ratio Γ = (R−r)/d ≈ 0.08–0.10. More pixels do not help. A different position does.
 
 ## Build
 
@@ -44,7 +44,7 @@ Verify the hole exists (ground truth):
 cargo run --release -- --resolution 128 --photons 1000000 --topology --out .
 ```
 
-Run the full experiment (20-condition matrix):
+Run the full experiment (55-condition matrix):
 
 ```bash
 cargo run --release -- --resolution 128 --photons 1000000 --experiment --out .

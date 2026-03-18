@@ -153,10 +153,13 @@ pub fn trace_ray(origin: Vec3, dir: Vec3, extent: f32, epsilon: f32) -> Option<(
 
     for _ in 0..max_steps {
         let p = origin + dir * t;
-        // Check bounds
-        if p.x < -0.1 || p.x > extent + 0.1
-            || p.y < -0.1 || p.y > extent + 0.1
-            || p.z < -1.0 || p.z > extent + 0.1
+        // Check bounds: ray has left the simulation volume.
+        // Use generous bounds to allow observers positioned outside the volume
+        // to cast rays toward objects inside it.
+        let margin = extent;
+        if p.x < -margin || p.x > extent + margin
+            || p.y < -margin || p.y > extent + margin
+            || p.z < -margin || p.z > extent + margin
         {
             return None;
         }
