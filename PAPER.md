@@ -2,6 +2,7 @@
 
 **Ryan J. Cardwell**
 Crystalline Labs LLC, Milton, FL, USA
+ORCID: 0009-0005-0307-0746
 
 **Date:** March 2026
 **Version:** 1.0
@@ -317,7 +318,7 @@ The architecture presented here — source system with intrinsic topology, obser
 
 In quantum mechanics, the measurement apparatus determines which basis the system is projected onto, and the choice of basis determines which properties are preserved. Measurement is not passive recording; it is active projection.
 
-In neuroscience, the question of how biological observers perceive topology (distinguishing a mug from a donut from a sphere) involves projection through the visual apparatus (retina → cortex) with loss of information at each stage. The depth-contrast effect identified here — topology is lost when the depth contrast falls below a threshold — may have a biological analog in the visual system's contrast sensitivity function.
+In neuroscience, the question of how biological observers perceive topology (distinguishing a mug from a donut from a sphere) involves projection through the visual apparatus (retina → cortex) with loss of information at each stage. The depth-contrast effect identified here — topology is lost when the depth contrast falls below a threshold — maps directly onto the contrast sensitivity function (CSF) in biological vision research [12]: the human visual system detects spatial features based on contrast relative to background, not absolute luminance, and the CSF is a function of spatial frequency and viewing distance, not retinal resolution. Our finding that topological detection depends on depth contrast at a given distance, not on pixel resolution, is structurally the same relationship operating in the depth domain rather than the luminance domain.
 
 In the study of consciousness, the relationship between an observer-independent source (the physical world) and an observer-dependent experience (qualia) is often modeled as a projection or filtering process. The present work provides a concrete, falsifiable, reproducible instance of such a projection, with measurable topological consequences. We note this connection as a structural observation, not as a claim about the nature of consciousness.
 
@@ -452,6 +453,10 @@ The AI collaborator Claude (Anthropic, model claude-opus-4-6) served as computat
 [10] R. Ghrist. "Barcodes: The Persistent Topology of Data." *Bulletin of the AMS*, 45(1):61–75, 2008.
 
 [11] T. K. Dey et al. "Topology Preserving Edge Contraction." *Computational Geometry*, 2013.
+
+[12] F. W. Campbell and J. G. Robson. "Application of Fourier Analysis to the Visibility of Gratings." *Journal of Physiology*, 197(3):551–566, 1968.
+
+[13] M. V. Berry. "Diffractals." *Journal of Physics A: Mathematical and General*, 12(6):781–797, 1979.
 
 ---
 
